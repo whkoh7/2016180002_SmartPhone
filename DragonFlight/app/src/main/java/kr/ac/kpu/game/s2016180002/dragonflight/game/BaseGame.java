@@ -100,7 +100,7 @@ public class BaseGame {
 
         ArrayList<GameObject> enemies = layers.get(Layer.enemy.ordinal());
         ArrayList<GameObject> bullets = layers.get(Layer.bullet.ordinal());
-        ArrayList<GameObject> p = layers.get(Layer.player.ordinal());
+        ArrayList<GameObject> players = layers.get(Layer.player.ordinal());
         for(GameObject o1: enemies){
             Enemy enemy = (Enemy) o1;
             boolean collided = false;
@@ -114,8 +114,11 @@ public class BaseGame {
                     break;
                 }
             }
-            if(collided){
-                break;
+            for(GameObject o3 : players) {
+                Player player = (Player) o3;
+                if(CollisionHelper.collides(enemy,player)){
+                    score.addScore(-500);
+                }
             }
         }
 //        for (GameObject o1 : objects) {
