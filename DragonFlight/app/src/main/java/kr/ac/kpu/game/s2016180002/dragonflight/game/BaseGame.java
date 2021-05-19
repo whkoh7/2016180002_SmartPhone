@@ -29,6 +29,8 @@ public class BaseGame {
     }
     public float frameTime;
     private boolean initialized;
+    private static float COLLIDE_INTERVAL = 1.0f/3.0f;
+    private float collideTime = 0.0f;
 
     //    Player player;
     ArrayList<ArrayList<GameObject>> layers;
@@ -103,6 +105,7 @@ public class BaseGame {
         ArrayList<GameObject> bullets = layers.get(Layer.bullet.ordinal());
         ArrayList<GameObject> players = layers.get(Layer.player.ordinal());
         ArrayList<GameObject> hps     = layers.get(Layer.hp.ordinal());
+        collideTime += frameTime;
         for(GameObject o1: enemies){
             Enemy enemy = (Enemy) o1;
             boolean collided = false;
@@ -118,14 +121,17 @@ public class BaseGame {
             }
             for(GameObject o3 : players){
                 Player player = (Player)o3;
-                if(CollisionHelper.collides(enemy,player)){
-                    for(GameObject o4:hps) {
-                        ImageObject hp = (ImageObject) o4;
-                        remove(hp);
+                if(CollisionHelper.collides(enemy,player)) {
+                    if (collideTime >= COLLIDE_INTERVAL) {
+                        for (GameObject o4 : hps) {
+                            ImageObject hp = (ImageObject) o4;
+                            remove(hp);
+                            collideTime = 0.0f;
+                            break;
+                        }
+                        collided = true;
                         break;
                     }
-                    collided = true;
-                    break;
                 }
             }
             if(collided){
@@ -162,11 +168,11 @@ public class BaseGame {
 
     public void draw(Canvas canvas) {
         //if (!initialized) return;
-            for(ArrayList<GameObject> objects : layers) {
-                for (GameObject o : objects) {
-                    o.draw(canvas);
-                }
+        for(ArrayList<GameObject> objects : layers) {
+            for (GameObject o : objects) {
+                o.draw(canvas);
             }
+        }
     }
 
     public boolean onTouchEvent(MotionEvent event) {
