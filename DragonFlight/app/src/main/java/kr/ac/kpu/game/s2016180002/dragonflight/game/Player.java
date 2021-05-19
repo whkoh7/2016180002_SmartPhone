@@ -72,6 +72,8 @@ public class Player implements GameObject, BoxCollidable {
 
     @Override
     public void getBoundingRect(RectF rect) {
-        planeBitmap.getBoundingRect(x, y, rect);
+        float bound = 10;
+        rect.set(x - bound, y + bound, x + bound,  y - bound);
+//        planeBitmap.getBoundingRect(x, y, rect);
     }
 }

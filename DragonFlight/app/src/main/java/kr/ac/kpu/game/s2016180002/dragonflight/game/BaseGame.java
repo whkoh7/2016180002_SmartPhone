@@ -2,6 +2,7 @@ package kr.ac.kpu.game.s2016180002.dragonflight.game;
 
 
 import android.graphics.Canvas;
+import android.media.Image;
 import android.view.MotionEvent;
 
 import java.util.ArrayList;
@@ -101,6 +102,7 @@ public class BaseGame {
         ArrayList<GameObject> enemies = layers.get(Layer.enemy.ordinal());
         ArrayList<GameObject> bullets = layers.get(Layer.bullet.ordinal());
         ArrayList<GameObject> players = layers.get(Layer.player.ordinal());
+        ArrayList<GameObject> hps     = layers.get(Layer.hp.ordinal());
         for(GameObject o1: enemies){
             Enemy enemy = (Enemy) o1;
             boolean collided = false;
@@ -114,11 +116,20 @@ public class BaseGame {
                     break;
                 }
             }
-            for(GameObject o3 : players) {
-                Player player = (Player) o3;
+            for(GameObject o3 : players){
+                Player player = (Player)o3;
                 if(CollisionHelper.collides(enemy,player)){
-                    score.addScore(-500);
+                    for(GameObject o4:hps) {
+                        ImageObject hp = (ImageObject) o4;
+                        remove(hp);
+                        break;
+                    }
+                    collided = true;
+                    break;
                 }
+            }
+            if(collided){
+                break;
             }
         }
 //        for (GameObject o1 : objects) {
