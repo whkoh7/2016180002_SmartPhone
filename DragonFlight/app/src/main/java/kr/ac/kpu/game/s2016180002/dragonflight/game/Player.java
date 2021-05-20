@@ -8,6 +8,7 @@ import kr.ac.kpu.game.s2016180002.dragonflight.R;
 import kr.ac.kpu.game.s2016180002.dragonflight.framework.BoxCollidable;
 import kr.ac.kpu.game.s2016180002.dragonflight.framework.GameBitmap;
 import kr.ac.kpu.game.s2016180002.dragonflight.framework.GameObject;
+import kr.ac.kpu.game.s2016180002.dragonflight.ui.view.GameView;
 
 public class Player implements GameObject, BoxCollidable {
     private static final String TAG = Player.class.getSimpleName();
@@ -20,6 +21,7 @@ public class Player implements GameObject, BoxCollidable {
     private float x, y;
     private float tx, ty;
     private float speed;
+    private final float limitX;
     private GameBitmap planeBitmap;
     private GameBitmap fireBitmap;
 
@@ -32,23 +34,25 @@ public class Player implements GameObject, BoxCollidable {
         this.planeBitmap = new GameBitmap(R.mipmap.player);
         this.fireBitmap = new GameBitmap(R.mipmap.bullet_01);
         this.fireTime = 0.0f;
+        this.limitX = GameView.view.getWidth();
     }
 
     public void moveTo(float x, float y) {
-        this.tx = x;
+        if(x < limitX && x > 0)
+            this.x = x;
         //this.ty = this.y;
     }
 
     public void update() {
         BaseGame game = BaseGame.get();
-        float dx = speed * game.frameTime;
-        if (tx < x) { // move left
-            dx = -dx;
-        }
-        x += dx;
-        if ((dx > 0 && x > tx) || (dx < 0 && x < tx)) {
-            x = tx;
-        }
+//        float dx = speed * game.frameTime;
+//        if (tx < x) { // move left
+//            dx = -dx;
+//        }
+//        x += dx;
+//        if ((dx > 0 && x > tx) || (dx < 0 && x < tx)) {
+//            x = tx;
+//        }
 
         fireTime += game.frameTime;
         if(fireTime >= FIRE_INTERVAL){
@@ -76,4 +80,9 @@ public class Player implements GameObject, BoxCollidable {
         rect.set(x - bound, y + bound, x + bound,  y - bound);
 //        planeBitmap.getBoundingRect(x, y, rect);
     }
+
+    public float getX(){
+        return x;
+    }
+
 }

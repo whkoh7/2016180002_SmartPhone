@@ -3,6 +3,7 @@ package kr.ac.kpu.game.s2016180002.dragonflight.game;
 
 import android.graphics.Canvas;
 import android.media.Image;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class BaseGame {
     private static BaseGame instance;
     private Player player;
     private Score score;
+    private float previousX, previousY;
 
     public static BaseGame get() {
         if (instance == null) {
@@ -52,7 +54,7 @@ public class BaseGame {
     }
 
     public  enum Layer{
-        bg1, enemy, bullet, player, hp,  ui, controller, ENEMY_COUNT
+        bg1, enemy, bullet, player, hp,  ui, controller, item, ENEMY_COUNT;
     }
 
     public boolean initResources() {
@@ -113,6 +115,7 @@ public class BaseGame {
                 Bullet bullet = (Bullet) o2;
                 if(CollisionHelper.collides(enemy, bullet)) {
                     remove(bullet);
+                    enemy.generateItem();
                     remove(enemy);
                     score.addScore(100);
                     collided = true;
@@ -168,21 +171,33 @@ public class BaseGame {
 
     public void draw(Canvas canvas) {
         //if (!initialized) return;
-        for(ArrayList<GameObject> objects : layers) {
-            for (GameObject o : objects) {
-                o.draw(canvas);
+            for(ArrayList<GameObject> objects : layers) {
+                for (GameObject o : objects) {
+                    o.draw(canvas);
+                }
             }
-        }
     }
 
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction();
-//        if (action == MotionEvent.ACTION_DOWN) {
-        if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_MOVE) {
-            player.moveTo(event.getX(), event.getY());
+        if(action == MotionEvent.ACTION_DOWN && action != MotionEvent.ACTION_MOVE){
+            previousX = event.getX();
+            previousY = event.getY();
+            return true;
+            }
+        else if(action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_MOVE){
+            player.moveTo(player.getX() + (event.getX() - previousX), event.getY());
+            previousX = event.getX();
             return true;
         }
         return false;
+//        int action = event.getAction();
+////        if (action == MotionEvent.ACTION_DOWN) {
+//        if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_MOVE) {
+//            player.moveTo(event.getX(), event.getY());
+//            return true;
+//        }
+//        return false;
     }
 
     public void add(Layer layer, GameObject gameObject) {

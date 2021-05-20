@@ -3,6 +3,8 @@ package kr.ac.kpu.game.s2016180002.dragonflight.game;
 import android.graphics.Canvas;
 import android.graphics.RectF;
 
+import java.util.Random;
+
 import kr.ac.kpu.game.s2016180002.dragonflight.R;
 import kr.ac.kpu.game.s2016180002.dragonflight.framework.AnimationGameBitmap;
 import kr.ac.kpu.game.s2016180002.dragonflight.framework.BoxCollidable;
@@ -60,6 +62,12 @@ public class Enemy implements GameObject, BoxCollidable, Recyclable {
         bitmap.draw(canvas,x,y);
     }
 
+    public void generateItem(){
+        Random r = new Random();
+        Item item = Item.get(this.x,this.y,r.nextInt(4));
+        BaseGame game = BaseGame.get();
+        game.add(BaseGame.Layer.item, item);
+    }
 
     @Override
     public void getBoundingRect(RectF rect) {
