@@ -8,6 +8,7 @@ import kr.ac.kpu.game.s2016180002.dragonflight.framework.BoxCollidable;
 import kr.ac.kpu.game.s2016180002.dragonflight.framework.GameBitmap;
 import kr.ac.kpu.game.s2016180002.dragonflight.framework.GameObject;
 import kr.ac.kpu.game.s2016180002.dragonflight.framework.Recyclable;
+import kr.ac.kpu.game.s2016180002.dragonflight.ui.view.GameView;
 
 public class Item implements GameObject, BoxCollidable, Recyclable {
     private int speed = - 100;
@@ -20,7 +21,6 @@ public class Item implements GameObject, BoxCollidable, Recyclable {
         this.x = x;
         this.y = y;
         this.type = type;
-
         if(type == 0){this.bitmap = new GameBitmap(R.mipmap.coin);}
         else if(type == 1){this.bitmap = new GameBitmap(R.mipmap.gem_ruby);}
         else if(type == 2){this.bitmap = new GameBitmap(R.mipmap.gem_emerald);}
@@ -34,13 +34,14 @@ public class Item implements GameObject, BoxCollidable, Recyclable {
             return new Item(x,y,type);
         }
         item.init(x,y,type);
-        return null;
+        return item;
     }
 
     private void init(float x, float y, int type) {
         this.x = x;
         this.y = y;
         this.type = type;
+        this.speed = -100;
     }
 
     @Override
@@ -50,13 +51,12 @@ public class Item implements GameObject, BoxCollidable, Recyclable {
 
     @Override
     public void update() {
-//        BaseGame game = BaseGame.get();
-//        y += speed * game.frameTime;
-//        speed += 5;
-//        if ( y < 0) {
-//            game.remove(this);
-//            recycle();
-//        }
+        BaseGame game = BaseGame.get();
+        y += speed * game.frameTime;
+        speed += 5;
+        if ( y > GameView.view.getHeight()) {
+            game.remove(this);
+        }
     }
 
     @Override
@@ -64,6 +64,9 @@ public class Item implements GameObject, BoxCollidable, Recyclable {
 
     @Override
     public void recycle() {
+    }
 
+    public int getType(){
+        return type;
     }
 }

@@ -36,10 +36,12 @@ public class Score implements GameObject {
 
     @Override
     public void update() {
-        // 할 일이 없음 너무 부러움
-        if(displayScore < score){
-            displayScore++;
-        }
+//        // 할 일이 없음 너무 부러움
+//        if(displayScore < score){
+//            displayScore++;
+//        }
+
+        displayScore = score;
     }
 
     @Override
