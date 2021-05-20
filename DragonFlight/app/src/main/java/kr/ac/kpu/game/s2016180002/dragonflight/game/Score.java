@@ -14,6 +14,8 @@ public class Score implements GameObject {
     private final Bitmap bitmap;
     private final int right;
     private final int top;
+    private final float ADD_INTERVAL = 1.0f / 7.5f;
+    private float flightTime;
 
     public void setScore(int score) {
         this.score = score;
@@ -36,11 +38,12 @@ public class Score implements GameObject {
 
     @Override
     public void update() {
-//        // 할 일이 없음 너무 부러움
-//        if(displayScore < score){
-//            displayScore++;
-//        }
-
+        BaseGame game = BaseGame.get();
+        flightTime += game.frameTime;
+        if(flightTime > ADD_INTERVAL){
+            score += 1;
+            flightTime -= ADD_INTERVAL;
+        }
         displayScore = score;
     }
 
