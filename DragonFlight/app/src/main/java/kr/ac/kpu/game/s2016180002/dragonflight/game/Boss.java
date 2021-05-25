@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.RectF;
 
 import kr.ac.kpu.game.s2016180002.dragonflight.R;
+import kr.ac.kpu.game.s2016180002.dragonflight.framework.AnimationGameBitmap;
 import kr.ac.kpu.game.s2016180002.dragonflight.framework.BoxCollidable;
 import kr.ac.kpu.game.s2016180002.dragonflight.framework.GameBitmap;
 import kr.ac.kpu.game.s2016180002.dragonflight.framework.GameObject;
@@ -40,7 +41,8 @@ public class Boss implements GameObject, BoxCollidable, Recyclable {
         this.hp = hp;
         this.level = level;
 
-        this.bitmap = new GameBitmap()
+        int resId = RESOURCE_IDS[level - 1];
+        this.bitmap = new GameBitmap(resId);
     }
 
     @Override
