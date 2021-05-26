@@ -3,6 +3,8 @@ package kr.ac.kpu.game.s2016180002.dragonflight.game;
 import android.graphics.Canvas;
 import android.graphics.RectF;
 
+import java.util.Random;
+
 import kr.ac.kpu.game.s2016180002.dragonflight.R;
 import kr.ac.kpu.game.s2016180002.dragonflight.framework.AnimationGameBitmap;
 import kr.ac.kpu.game.s2016180002.dragonflight.framework.BoxCollidable;
@@ -53,9 +55,35 @@ public class Boss implements GameObject, BoxCollidable, Recyclable {
     }
 
     private void fireBullet() {
-        BossBullet bossbullet = BossBullet.get(this.x, this.y, BULLET_SPEED);
         BaseGame game = BaseGame.get();
-        game.add(BaseGame.Layer.bossbullet, bossbullet);
+        Random r = new Random();
+        int pattern = r.nextInt(3);
+        switch (pattern) {
+            case 1:
+                BossBullet bossbullet1 = BossBullet.get(this.x, this.y, BULLET_SPEED, -1, y + 1);
+                BossBullet bossbullet2 = BossBullet.get(this.x, this.y, BULLET_SPEED, 0, y + 1);
+                BossBullet bossbullet3 = BossBullet.get(this.x, this.y, BULLET_SPEED, 1, y + 1);
+                game.add(BaseGame.Layer.bossbullet, bossbullet1);
+                game.add(BaseGame.Layer.bossbullet, bossbullet2);
+                game.add(BaseGame.Layer.bossbullet, bossbullet3);
+                break;
+            case 2:
+                BossBullet bossbullet = BossBullet.get(this.x, this.y, BULLET_SPEED, 0, y + 1);
+                game.add(BaseGame.Layer.bossbullet, bossbullet);
+                break;
+            case 3:
+                BossBullet bossbullet4 = BossBullet.get(this.x, this.y, BULLET_SPEED, -1.5f, y + 1);
+                BossBullet bossbullet5 = BossBullet.get(this.x, this.y, BULLET_SPEED, -1, y + 1);
+                BossBullet bossbullet6 = BossBullet.get(this.x, this.y, BULLET_SPEED, 0, y + 1);
+                BossBullet bossbullet7 = BossBullet.get(this.x, this.y, BULLET_SPEED, 1, y + 1);
+                BossBullet bossbullet8 = BossBullet.get(this.x, this.y, BULLET_SPEED, 1.5f, y + 1);
+                game.add(BaseGame.Layer.bossbullet, bossbullet4);
+                game.add(BaseGame.Layer.bossbullet, bossbullet5);
+                game.add(BaseGame.Layer.bossbullet, bossbullet6);
+                game.add(BaseGame.Layer.bossbullet, bossbullet7);
+                game.add(BaseGame.Layer.bossbullet, bossbullet8);
+                break;
+        }
     }
 
     @Override

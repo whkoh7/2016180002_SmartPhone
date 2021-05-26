@@ -2,6 +2,7 @@ package kr.ac.kpu.game.s2016180002.dragonflight.game;
 
 import android.graphics.Canvas;
 import android.graphics.RectF;
+import android.util.Log;
 
 import kr.ac.kpu.game.s2016180002.dragonflight.R;
 import kr.ac.kpu.game.s2016180002.dragonflight.framework.BoxCollidable;
@@ -14,34 +15,41 @@ public class BossBullet implements GameObject, BoxCollidable, Recyclable {
     private float x;
     private final GameBitmap bitmap;
     private float y;
+    private float dx;
+    private float dy;
 
-    private BossBullet(float x, float y, int speed){
+    private BossBullet(float x, float y, int speed, float dx, float dy){
         this.x = x;
         this.y = y;
         this.speed = speed;
         this.bitmap = new GameBitmap(R.mipmap.boss_bullet_01);
+        this.dx = dx;
+        this.dy = dy;
     }
 
 
-    public static BossBullet get(float x, float y, int speed) {
+    public static BossBullet get(float x, float y, int speed, float dx, float dy) {
         BaseGame game = BaseGame.get();
         BossBullet bossbullet = (BossBullet) game.get(BossBullet.class);
         if(bossbullet == null){
-            return new BossBullet(x,y,speed);
+            return new BossBullet(x,y,speed, dx, dy);
         }
-        bossbullet.init(x, y, speed);
+        bossbullet.init(x, y, speed, dx, dy);
         return bossbullet;
     }
 
-    private void init(float x, float y, int speed) {
+    private void init(float x, float y, int speed, float dx, float dy) {
         this.x = x;
         this.y = y;
         this.speed = -speed;
+        this.dx = dx;
+        this.dy = dy;
     }
 
     @Override
     public void update() {
         BaseGame game = BaseGame.get();
+        x += dx * speed * game.frameTime;
         y += speed * game.frameTime;
         if ( y < 0) {
             game.remove(this);
