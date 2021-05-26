@@ -13,6 +13,7 @@ public class EnemyGenerator implements GameObject {
     private float time;
     private float spawnInterval;
     private int wave;
+    public boolean boss_spawn;
 
     public EnemyGenerator(){
         time = INITIAL_SPAWN_INTERVAL;
@@ -31,11 +32,15 @@ public class EnemyGenerator implements GameObject {
     }
 
     private void generate() {
-        wave++;
         BaseGame game = BaseGame.get();
+        wave++;
         int tenth = GameView.view.getWidth() / 10;
         Random r = new Random();
         for(int i = 1; i <= 9; i+= 2){
+            if(boss_spawn) {
+                wave--;
+                break;
+            }
             int x = tenth * i;
             int y = 0;
             int level = wave / 10 - r.nextInt(3);
@@ -43,11 +48,11 @@ public class EnemyGenerator implements GameObject {
             if (level > 20) level = 20;
 
             if(wave == 2){
-                Boss boss = Boss.get(level,GameView.view.getWidth()/2,y,700);
+                Boss boss = Boss.get(1,GameView.view.getWidth()/2,y,10 * wave);
                 game.add(BaseGame.Layer.boss, boss);
+                boss_spawn = true;
                 break;
             }
-            level = 3;
             Enemy enemy = Enemy.get(level,x,y,700);
             game.add(BaseGame.Layer.enemy, enemy);
         }

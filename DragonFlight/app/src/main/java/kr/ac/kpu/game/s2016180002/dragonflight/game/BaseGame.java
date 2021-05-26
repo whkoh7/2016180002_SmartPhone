@@ -108,6 +108,7 @@ public class BaseGame {
         ArrayList<GameObject> players = layers.get(Layer.player.ordinal());
         ArrayList<GameObject> hps     = layers.get(Layer.hp.ordinal());
         ArrayList<GameObject> items   = layers.get(Layer.item.ordinal());
+        ArrayList<GameObject> bosses  = layers.get(Layer.boss.ordinal());
         collideTime += frameTime;
         for(GameObject o1: enemies){
             Enemy enemy = (Enemy) o1;
@@ -161,6 +162,24 @@ public class BaseGame {
             }
             if(collided){
                 break;
+            }
+        }
+        for(GameObject o1: bosses) {
+            Boss boss = (Boss) o1;
+            boolean collided = false;
+            for (GameObject o2 : bullets) {
+                Bullet bullet = (Bullet) o2;
+                if (CollisionHelper.collides(boss, bullet)) {
+                    remove(bullet);
+                    if (boss.getHp() > 0) {
+                        boss.setHp(boss.getHp() - 1);
+                    } else if (boss.getHp() == 0) {
+                        remove(boss);
+                        score.addScore(1000);
+                        collided = true;
+                        break;
+                    }
+                }
             }
         }
 //        for (GameObject o1 : objects) {
