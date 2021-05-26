@@ -54,7 +54,7 @@ public class BaseGame {
     }
 
     public  enum Layer{
-        bg1, enemy, bullet, player, hp,  ui, controller, item, ENEMY_COUNT;
+        bg1, boss, enemy, bullet, player, hp,  ui, controller, item, ENEMY_COUNT,;
     }
 
     public boolean initResources() {
@@ -116,11 +116,16 @@ public class BaseGame {
                 Bullet bullet = (Bullet) o2;
                 if(CollisionHelper.collides(enemy, bullet)) {
                     remove(bullet);
-                    enemy.generateItem();
-                    remove(enemy);
-                    score.addScore(100);
-                    collided = true;
-                    break;
+                    if(enemy.getHp() > 0) {
+                        enemy.setHp(enemy.getHp() - 1);
+                    }
+                    else if(enemy.getHp() == 0) {
+                        enemy.generateItem();
+                        remove(enemy);
+                        score.addScore(100);
+                        collided = true;
+                        break;
+                    }
                 }
             }
             for(GameObject o3 : players){

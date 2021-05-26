@@ -41,6 +41,13 @@ public class EnemyGenerator implements GameObject {
             int level = wave / 10 - r.nextInt(3);
             if (level < 1) level = 1;
             if (level > 20) level = 20;
+
+            if(wave == 2){
+                Boss boss = Boss.get(level,GameView.view.getWidth()/2,y,700);
+                game.add(BaseGame.Layer.boss, boss);
+                break;
+            }
+            level = 3;
             Enemy enemy = Enemy.get(level,x,y,700);
             game.add(BaseGame.Layer.enemy, enemy);
         }

@@ -20,6 +20,7 @@ public class Enemy implements GameObject, BoxCollidable, Recyclable {
     private float x;
     private AnimationGameBitmap bitmap;
     private int level;
+    private int hp;
     private float y;
     private int speed;
 
@@ -41,6 +42,7 @@ public class Enemy implements GameObject, BoxCollidable, Recyclable {
         this.y = y;
         this.speed = speed;
         this.level = level;
+        this.hp = level;
 
         int resId = RESOURCE_IDS[level-1];
 
@@ -77,5 +79,13 @@ public class Enemy implements GameObject, BoxCollidable, Recyclable {
     @Override
     public void recycle() {
         // 재활용 통에 들어가는 시점에 불리는 함수
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public void setHp(int hp) {
+        this.hp = hp;
     }
 }
