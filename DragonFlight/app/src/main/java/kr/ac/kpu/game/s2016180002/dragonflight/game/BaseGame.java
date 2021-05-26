@@ -54,7 +54,7 @@ public class BaseGame {
     }
 
     public  enum Layer{
-        bg1, boss, enemy, bullet, player, hp,  ui, controller, item, ENEMY_COUNT,;
+        bg1, boss, bossbullet, enemy, bullet, player, hp,  ui, controller, item, ENEMY_COUNT,;
     }
 
     public boolean initResources() {

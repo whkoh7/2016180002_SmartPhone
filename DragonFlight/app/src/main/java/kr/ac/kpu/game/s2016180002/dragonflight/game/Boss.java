@@ -15,12 +15,16 @@ public class Boss implements GameObject, BoxCollidable, Recyclable {
     private static final int[] RESOURCE_IDS ={
             R.mipmap.boss_insect, R.mipmap.boss_slime
     };
+    private static final int BULLET_SPEED = 800;
+    private static float FIRE_INTERVAL = 1.0f / 3.5f;
+
     private float x;
     private float y;
     private float hp;
     private int level;
     private float speed;
     private GameBitmap bitmap;
+    private float fireTime;
 
     @Override
     public void getBoundingRect(RectF rect) {
@@ -43,8 +47,15 @@ public class Boss implements GameObject, BoxCollidable, Recyclable {
         this.hp = hp;
         this.level = level;
         this.speed = 400;
+        fireTime = 0;
         int resId = RESOURCE_IDS[level - 1];
         this.bitmap = new GameBitmap(resId);
+    }
+
+    private void fireBullet() {
+        BossBullet bossbullet = BossBullet.get(this.x, this.y, BULLET_SPEED);
+        BaseGame game = BaseGame.get();
+        game.add(BaseGame.Layer.bossbullet, bossbullet);
     }
 
     @Override
@@ -57,6 +68,11 @@ public class Boss implements GameObject, BoxCollidable, Recyclable {
         if(x >= GameView.view.getWidth() - bitmap.getWidth()/2 * GameView.MULTIPLIER|| x <= bitmap.getWidth()/2 * GameView.MULTIPLIER)
             speed *= -1;
         x += speed * game.frameTime;
+        fireTime += game.frameTime;
+        if(fireTime >= FIRE_INTERVAL){
+            fireBullet();
+            fireTime -= FIRE_INTERVAL;
+        }
     }
 
     @Override
