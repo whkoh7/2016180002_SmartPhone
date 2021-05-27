@@ -17,6 +17,8 @@ import kr.ac.kpu.game.s2016180002.dragonflight.utils.CollisionHelper;
 
 public class BaseGame {
     private static final String TAG = BaseGame.class.getSimpleName();
+    private static final int MAX_POWER = 3;
+    private static final int BOSS_SCORE = 100;
     // singleton
     private static BaseGame instance;
     private Player player;
@@ -119,12 +121,12 @@ public class BaseGame {
                 if(CollisionHelper.collides(enemy, bullet)) {
                     remove(bullet);
                     if(enemy.getHp() > 0) {
-                        enemy.setHp(enemy.getHp() - 1);
+                        enemy.setHp(enemy.getHp() - bullet.power);
                     }
                     else if(enemy.getHp() == 0) {
                         enemy.generateItem();
                         remove(enemy);
-                        score.addScore(100);
+                        score.addScore(BOSS_SCORE);
                         collided = true;
                         break;
                     }
@@ -155,10 +157,17 @@ public class BaseGame {
             for(GameObject o2 : players){
                 Player player = (Player) o2;
                 if(CollisionHelper.collides(item,player)){
-                    score.addScore(item.getType() * 100);
+                    if(item.getType() < 3) {
+                        score.addScore(item.getType() * 100);
+                    }
+                    else if(item.getType() == 3){
+                        if(player.power < MAX_POWER)
+                            player.power += 1;
+                    }
                     remove(item);
                     collided = true;
                     break;
+
                 }
             }
             if(collided){
@@ -173,7 +182,7 @@ public class BaseGame {
                 if (CollisionHelper.collides(boss, bullet)) {
                     remove(bullet);
                     if (boss.getHp() > 0) {
-                        boss.setHp(boss.getHp() - 1);
+                        boss.setHp(boss.getHp() - bullet.power);
                     } else if (boss.getHp() == 0) {
                         bossdie = true;
                         remove(boss);

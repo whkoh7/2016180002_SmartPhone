@@ -2,6 +2,7 @@ package kr.ac.kpu.game.s2016180002.dragonflight.game;
 
 import android.graphics.Canvas;
 import android.graphics.RectF;
+import android.util.Log;
 
 import kr.ac.kpu.game.s2016180002.dragonflight.R;
 import kr.ac.kpu.game.s2016180002.dragonflight.framework.BoxCollidable;
@@ -13,33 +14,41 @@ public class Bullet implements GameObject, BoxCollidable, Recyclable {
     private static final String TAG = Bullet.class.getSimpleName();
     private int speed;
     private float x;
-    private final GameBitmap bitmap;
+    private static final int[] RESOURCE_IDS = {
+            R.mipmap.bullet_01, R.mipmap.bullet_02, R.mipmap.bullet_03
+    };
+    private GameBitmap bitmap;
     private float y;
+    public  int power;
 
-    private Bullet(float x, float y, int speed) {
+    private Bullet(float x, float y, int speed, int power) {
         this.x = x;
         this.y = y;
         this.speed = -speed;
-
+        this.power = power;
         this.bitmap = new GameBitmap(R.mipmap.bullet_01);
     }
 
 //    private static ArrayList<Bullet> recycleBin = new ArrayList();
 
-    public static Bullet get(float x, float y, int speed) {
+    public static Bullet get(float x, float y, int speed, int power) {
         BaseGame game = BaseGame.get();
         Bullet bullet = (Bullet) game.get(Bullet.class);
         if(bullet == null){
-            return new Bullet(x,y,speed);
+            return new Bullet(x,y,speed,power);
         }
-        bullet.init(x, y, speed);
+        Log.d(TAG, "get: " + power);
+        bullet.init(x, y, speed, power);
         return bullet;
     }
 
-    private void init(float x, float y, int speed) {
+    private void init(float x, float y, int speed, int power) {
         this.x = x;
         this.y = y;
         this.speed = -speed;
+        this.power = power;
+        int resId = RESOURCE_IDS[power - 1];
+        this.bitmap = new GameBitmap(resId);
     }
 
     @Override

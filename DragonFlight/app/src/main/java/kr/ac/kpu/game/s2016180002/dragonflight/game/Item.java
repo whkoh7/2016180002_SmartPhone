@@ -24,6 +24,7 @@ public class Item implements GameObject, BoxCollidable, Recyclable {
         if(type == 0){this.bitmap = new GameBitmap(R.mipmap.coin);}
         else if(type == 1){this.bitmap = new GameBitmap(R.mipmap.gem_ruby);}
         else if(type == 2){this.bitmap = new GameBitmap(R.mipmap.gem_emerald);}
+        else if(type == 3){this.bitmap = new GameBitmap(R.mipmap.power_up);}
         else{this.bitmap = new GameBitmap(R.mipmap.gem_diamond);}
     }
 

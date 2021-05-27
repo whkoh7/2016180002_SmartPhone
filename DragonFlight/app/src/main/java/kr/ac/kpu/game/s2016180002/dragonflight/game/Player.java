@@ -21,6 +21,7 @@ public class Player implements GameObject, BoxCollidable {
     private float x, y;
     private float tx, ty;
     private float speed;
+    public  int   power;
     private final float limitX;
     private GameBitmap planeBitmap;
     private GameBitmap fireBitmap;
@@ -31,6 +32,7 @@ public class Player implements GameObject, BoxCollidable {
         this.tx = x;
         this.ty = 0;
         this.speed = 800;
+        this.power = 1;
         this.planeBitmap = new GameBitmap(R.mipmap.player);
         this.fireBitmap = new GameBitmap(R.mipmap.bullet_01);
         this.fireTime = 0.0f;
@@ -62,7 +64,7 @@ public class Player implements GameObject, BoxCollidable {
     }
 
     private void fireBullet() {
-        Bullet bullet = Bullet.get(this.x, this.y, BULLET_SPEED);
+        Bullet bullet = Bullet.get(this.x, this.y, BULLET_SPEED, power);
         BaseGame game = BaseGame.get();
         game.add(BaseGame.Layer.bullet, bullet);
     }

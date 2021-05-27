@@ -18,6 +18,7 @@ public class Boss implements GameObject, BoxCollidable, Recyclable {
             R.mipmap.boss_insect, R.mipmap.boss_slime
     };
     private static final int BULLET_SPEED = 800;
+    private static final float Y_POS = 300;
     private static float FIRE_INTERVAL = 1.0f / 3.5f;
 
     private float x;
@@ -89,7 +90,7 @@ public class Boss implements GameObject, BoxCollidable, Recyclable {
     @Override
     public void update() {
         BaseGame game = BaseGame.get();
-        if( y < 300) {
+        if( y < Y_POS) {
             y += speed * game.frameTime;
             return;
         }
