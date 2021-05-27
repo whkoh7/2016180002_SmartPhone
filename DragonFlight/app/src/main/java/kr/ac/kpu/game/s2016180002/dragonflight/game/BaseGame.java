@@ -22,6 +22,7 @@ public class BaseGame {
     private Player player;
     private Score score;
     private float previousX, previousY;
+    public boolean bossdie = false;
 
     public static BaseGame get() {
         if (instance == null) {
@@ -103,12 +104,12 @@ public class BaseGame {
             }
         }
 
-        ArrayList<GameObject> enemies = layers.get(Layer.enemy.ordinal());
-        ArrayList<GameObject> bullets = layers.get(Layer.bullet.ordinal());
-        ArrayList<GameObject> players = layers.get(Layer.player.ordinal());
-        ArrayList<GameObject> hps     = layers.get(Layer.hp.ordinal());
-        ArrayList<GameObject> items   = layers.get(Layer.item.ordinal());
-        ArrayList<GameObject> bosses  = layers.get(Layer.boss.ordinal());
+        ArrayList<GameObject> enemies       = layers.get(Layer.enemy.ordinal());
+        ArrayList<GameObject> bullets       = layers.get(Layer.bullet.ordinal());
+        ArrayList<GameObject> players       = layers.get(Layer.player.ordinal());
+        ArrayList<GameObject> hps           = layers.get(Layer.hp.ordinal());
+        ArrayList<GameObject> items         = layers.get(Layer.item.ordinal());
+        ArrayList<GameObject> bosses        = layers.get(Layer.boss.ordinal());
         collideTime += frameTime;
         for(GameObject o1: enemies){
             Enemy enemy = (Enemy) o1;
@@ -174,6 +175,7 @@ public class BaseGame {
                     if (boss.getHp() > 0) {
                         boss.setHp(boss.getHp() - 1);
                     } else if (boss.getHp() == 0) {
+                        bossdie = true;
                         remove(boss);
                         score.addScore(1000);
                         collided = true;

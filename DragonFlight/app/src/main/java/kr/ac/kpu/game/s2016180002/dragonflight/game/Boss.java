@@ -59,7 +59,7 @@ public class Boss implements GameObject, BoxCollidable, Recyclable {
         Random r = new Random();
         int pattern = r.nextInt(3);
         switch (pattern) {
-            case 1:
+            case 0:
                 BossBullet bossbullet1 = BossBullet.get(this.x, this.y, BULLET_SPEED, -1, y + 1);
                 BossBullet bossbullet2 = BossBullet.get(this.x, this.y, BULLET_SPEED, 0, y + 1);
                 BossBullet bossbullet3 = BossBullet.get(this.x, this.y, BULLET_SPEED, 1, y + 1);
@@ -67,11 +67,11 @@ public class Boss implements GameObject, BoxCollidable, Recyclable {
                 game.add(BaseGame.Layer.bossbullet, bossbullet2);
                 game.add(BaseGame.Layer.bossbullet, bossbullet3);
                 break;
-            case 2:
+            case 1:
                 BossBullet bossbullet = BossBullet.get(this.x, this.y, BULLET_SPEED, 0, y + 1);
                 game.add(BaseGame.Layer.bossbullet, bossbullet);
                 break;
-            case 3:
+            case 2:
                 BossBullet bossbullet4 = BossBullet.get(this.x, this.y, BULLET_SPEED, -1.5f, y + 1);
                 BossBullet bossbullet5 = BossBullet.get(this.x, this.y, BULLET_SPEED, -1, y + 1);
                 BossBullet bossbullet6 = BossBullet.get(this.x, this.y, BULLET_SPEED, 0, y + 1);

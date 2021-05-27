@@ -24,6 +24,13 @@ public class EnemyGenerator implements GameObject {
     @Override
     public void update() {
         BaseGame game = BaseGame.get();
+        if(boss_spawn)
+        {
+            if(game.bossdie) {
+                boss_spawn = false;
+                game.bossdie = true;
+            }
+        }
         time += game.frameTime;
         if(time >= spawnInterval){
             generate();
@@ -48,7 +55,7 @@ public class EnemyGenerator implements GameObject {
             if (level > 20) level = 20;
 
             if(wave == 2){
-                Boss boss = Boss.get(1,GameView.view.getWidth()/2,y,10 * wave);
+                Boss boss = Boss.get(1,GameView.view.getWidth()/2,y,30 * wave);
                 game.add(BaseGame.Layer.boss, boss);
                 boss_spawn = true;
                 break;
@@ -57,7 +64,6 @@ public class EnemyGenerator implements GameObject {
             game.add(BaseGame.Layer.enemy, enemy);
         }
     }
-
     @Override
     public void draw(Canvas canvas) {
         // does nothing
