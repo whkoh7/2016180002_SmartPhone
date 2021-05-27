@@ -28,8 +28,9 @@ public class EnemyGenerator implements GameObject {
         {
             if(game.bossdie) {
                 boss_spawn = false;
-                game.bossdie = true;
+                game.bossdie = false;
             }
+            return;
         }
         time += game.frameTime;
         if(time >= spawnInterval){
@@ -44,24 +45,19 @@ public class EnemyGenerator implements GameObject {
         int tenth = GameView.view.getWidth() / 10;
         Random r = new Random();
         for(int i = 1; i <= 9; i+= 2){
-            if(boss_spawn) {
-                wave--;
-                break;
-            }
             int x = tenth * i;
             int y = 0;
             int level = wave / 5 - r.nextInt(3);
             if (level < 1) level = 1;
-            if (level > 20) level = 20;
+            if (level > 4) level = 4;
 
-            wave = 10;
             if(wave == 10 || wave == 20){
                 switch(wave)
                 {
-                    case 1:
+                    case 10:
                         level = 1;
                         break;
-                    case 2:
+                    case 20:
                         level = 2;
                 }
                 Boss boss = Boss.get(level,GameView.view.getWidth()/2,y,30 * wave);

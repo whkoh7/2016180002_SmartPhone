@@ -29,6 +29,9 @@ public class Boss implements GameObject, BoxCollidable, Recyclable {
     private GameBitmap bitmap;
     private float fireTime;
 
+    private Boss(){
+    }
+
     @Override
     public void getBoundingRect(RectF rect) {
         bitmap.getBoundingRect(x,y,rect);

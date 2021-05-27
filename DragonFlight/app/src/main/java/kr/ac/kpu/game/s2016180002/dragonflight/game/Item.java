@@ -11,28 +11,26 @@ import kr.ac.kpu.game.s2016180002.dragonflight.framework.Recyclable;
 import kr.ac.kpu.game.s2016180002.dragonflight.ui.view.GameView;
 
 public class Item implements GameObject, BoxCollidable, Recyclable {
+    private static final int[] RESOURCE_IDS ={
+            R.mipmap.coin, R.mipmap.gem_ruby, R.mipmap.gem_emerald, R.mipmap.gem_diamond, R.mipmap.power_up
+    };
     private int speed = - 100;
     private float x;
     private float y;
     private int type;
-    private final GameBitmap bitmap;
+    private GameBitmap bitmap;
 
     private Item(float x, float y, int type){
         this.x = x;
         this.y = y;
         this.type = type;
-        if(type == 0){this.bitmap = new GameBitmap(R.mipmap.coin);}
-        else if(type == 1){this.bitmap = new GameBitmap(R.mipmap.gem_ruby);}
-        else if(type == 2){this.bitmap = new GameBitmap(R.mipmap.gem_emerald);}
-        else if(type == 3){this.bitmap = new GameBitmap(R.mipmap.power_up);}
-        else{this.bitmap = new GameBitmap(R.mipmap.gem_diamond);}
     }
 
     public static Item get(float x, float y, int type) {
         BaseGame game = BaseGame.get();
         Item item = (Item)game.get(Item.class);
         if(item == null){
-            return new Item(x,y,type);
+            item = new Item(x,y,type);
         }
         item.init(x,y,type);
         return item;
@@ -43,6 +41,8 @@ public class Item implements GameObject, BoxCollidable, Recyclable {
         this.y = y;
         this.type = type;
         this.speed = -100;
+        int resId = RESOURCE_IDS[type];
+        this.bitmap = new GameBitmap(resId);
     }
 
     @Override

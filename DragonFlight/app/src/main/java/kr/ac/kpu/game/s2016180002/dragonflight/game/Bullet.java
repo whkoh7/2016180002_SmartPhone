@@ -37,7 +37,6 @@ public class Bullet implements GameObject, BoxCollidable, Recyclable {
         if(bullet == null){
             return new Bullet(x,y,speed,power);
         }
-        Log.d(TAG, "get: " + power);
         bullet.init(x, y, speed, power);
         return bullet;
     }

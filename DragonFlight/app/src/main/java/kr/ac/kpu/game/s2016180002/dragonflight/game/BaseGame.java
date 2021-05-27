@@ -50,6 +50,7 @@ public class BaseGame {
         }
         array.add(object);
     }
+
     public GameObject get(Class clazz){
         ArrayList<GameObject> array = recycleBin.get(clazz);
         if(array==null||array.isEmpty())return null;
@@ -112,6 +113,7 @@ public class BaseGame {
         ArrayList<GameObject> hps           = layers.get(Layer.hp.ordinal());
         ArrayList<GameObject> items         = layers.get(Layer.item.ordinal());
         ArrayList<GameObject> bosses        = layers.get(Layer.boss.ordinal());
+        ArrayList<GameObject> bossbullets   = layers.get(Layer.bossbullet.ordinal());
         collideTime += frameTime;
         for(GameObject o1: enemies){
             Enemy enemy = (Enemy) o1;
@@ -151,23 +153,41 @@ public class BaseGame {
                 break;
             }
         }
-        for(GameObject o1 : items){
-            Item item = (Item)o1;
+        for(GameObject o1 : players){
+            Player player = (Player) o1;
             boolean collided = false;
-            for(GameObject o2 : players){
-                Player player = (Player) o2;
+            for(GameObject o2 : items){
+                Item item = (Item) o2;
                 if(CollisionHelper.collides(item,player)){
-                    if(item.getType() < 3) {
+                    Log.d(TAG, "itemtype : " + item.getType());
+                    if(item.getType() < 4) {
                         score.addScore(item.getType() * 100);
                     }
-                    else if(item.getType() == 3){
+                    else if(item.getType() == 4){
                         if(player.power < MAX_POWER)
                             player.power += 1;
                     }
                     remove(item);
                     collided = true;
                     break;
-
+                }
+            }
+            if(collided){
+                break;
+            }
+            for(GameObject o3 : bossbullets){
+                BossBullet bossBullet = (BossBullet) o3;
+                if(CollisionHelper.collides(bossBullet,player)){
+                    if (collideTime >= COLLIDE_INTERVAL) {
+                        for (GameObject o4 : hps) {
+                            ImageObject hp = (ImageObject) o4;
+                            remove(hp);
+                            collideTime = 0.0f;
+                            break;
+                        }
+                        collided = true;
+                        break;
+                    }
                 }
             }
             if(collided){
@@ -191,6 +211,9 @@ public class BaseGame {
                         break;
                     }
                 }
+            }
+            if(collided) {
+                break;
             }
         }
 //        for (GameObject o1 : objects) {

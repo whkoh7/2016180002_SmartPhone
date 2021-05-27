@@ -17,7 +17,7 @@ public class Enemy implements GameObject, BoxCollidable, Recyclable {
     private static final int[] RESOURCE_IDS = {
             R.mipmap.monster_1, R.mipmap.monster_2, R.mipmap.monster_3, R.mipmap.monster_4
     };
-    private static final int TYPE_MAX = 4;
+    private static final int TYPE_MAX = 5;
     private float x;
     private AnimationGameBitmap bitmap;
     private int level;
@@ -67,7 +67,7 @@ public class Enemy implements GameObject, BoxCollidable, Recyclable {
 
     public void generateItem(){
         Random r = new Random();
-        Item item = Item.get(this.x,this.y,r.nextInt(TYPE_MAX));
+        Item item = Item.get(this.x + r.nextInt(100),this.y,r.nextInt(TYPE_MAX));
         BaseGame game = BaseGame.get();
         game.add(BaseGame.Layer.item, item);
     }
