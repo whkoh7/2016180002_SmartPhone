@@ -50,8 +50,7 @@ public class EnemyGenerator implements GameObject {
             int level = wave / 5 - r.nextInt(3);
             if (level < 1) level = 1;
             if (level > 4) level = 4;
-
-            if(wave == 10 || wave == 20){
+            if(wave == 5 || wave == 10){
                 switch(wave)
                 {
                     case 10:

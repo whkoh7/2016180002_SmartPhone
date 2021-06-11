@@ -1,8 +1,10 @@
 package kr.ac.kpu.game.s2016180002.dragonflight.game;
 
 
+import android.app.AlertDialog;
 import android.graphics.Canvas;
 import android.media.Image;
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -12,6 +14,7 @@ import java.util.HashMap;
 import kr.ac.kpu.game.s2016180002.dragonflight.R;
 import kr.ac.kpu.game.s2016180002.dragonflight.framework.GameObject;
 import kr.ac.kpu.game.s2016180002.dragonflight.framework.Recyclable;
+import kr.ac.kpu.game.s2016180002.dragonflight.ui.activity.MainActivity;
 import kr.ac.kpu.game.s2016180002.dragonflight.ui.view.GameView;
 import kr.ac.kpu.game.s2016180002.dragonflight.utils.CollisionHelper;
 
@@ -25,6 +28,8 @@ public class BaseGame {
     private Score score;
     private float previousX, previousY;
     public boolean bossdie = false;
+    private MediaPlayer mediaPlayer;
+    private int hp = 3;
 
     public static BaseGame get() {
         if (instance == null) {
@@ -58,7 +63,7 @@ public class BaseGame {
     }
 
     public  enum Layer{
-        bg1, boss, bossbullet, enemy, bullet, player, hp,  ui, controller, item, ENEMY_COUNT,;
+        bg1, boss, enemy, bullet, player, hp,  ui, controller, item,  bossbullet, bg2, ENEMY_COUNT,;
     }
 
     public boolean initResources() {
@@ -87,7 +92,10 @@ public class BaseGame {
         add(Layer.bg1,bg);
 //        HorizontalScrollBackground clouds = new HorizontalScrollBackground(R.mipmap.clouds, 20);
 //        add(Layer.bg2,clouds);
-
+        mediaPlayer = MediaPlayer.create(GameView.view.getContext(),R.raw.dragon_flight);
+        mediaPlayer.seekTo(0);
+        mediaPlayer.start();
+        mediaPlayer.setLooping(true);
         initialized = true;
         return true;
     }
@@ -121,18 +129,21 @@ public class BaseGame {
             for( GameObject o2 : bullets){
                 Bullet bullet = (Bullet) o2;
                 if(CollisionHelper.collides(enemy, bullet)) {
-                    remove(bullet);
+                    remove(bullet, false);
                     if(enemy.getHp() > 0) {
                         enemy.setHp(enemy.getHp() - bullet.power);
                     }
-                    else if(enemy.getHp() == 0) {
+                    else if(enemy.getHp() <= 0) {
                         enemy.generateItem();
-                        remove(enemy);
+                        remove(enemy, false);
                         score.addScore(BOSS_SCORE);
-                        collided = true;
-                        break;
                     }
+                    collided = true;
+                    break;
                 }
+            }
+            if(collided){
+                break;
             }
             for(GameObject o3 : players){
                 Player player = (Player)o3;
@@ -140,7 +151,14 @@ public class BaseGame {
                     if (collideTime >= COLLIDE_INTERVAL) {
                         for (GameObject o4 : hps) {
                             ImageObject hp = (ImageObject) o4;
-                            remove(hp);
+                            remove(hp, false);
+                            this.hp--;
+                            if(this.hp == 0)
+                            {
+                                remove(player,false);
+                                VerticalScrollBackground gameover = new VerticalScrollBackground(R.mipmap.bg_gameover,0);
+                                add(Layer.bg2, gameover);
+                            }
                             collideTime = 0.0f;
                             break;
                         }
@@ -167,7 +185,7 @@ public class BaseGame {
                         if(player.power < MAX_POWER)
                             player.power += 1;
                     }
-                    remove(item);
+                    remove(item, false);
                     collided = true;
                     break;
                 }
@@ -181,7 +199,14 @@ public class BaseGame {
                     if (collideTime >= COLLIDE_INTERVAL) {
                         for (GameObject o4 : hps) {
                             ImageObject hp = (ImageObject) o4;
-                            remove(hp);
+                            remove(hp, false);
+                            this.hp--;
+                            if(this.hp == 0)
+                            {
+                                remove(player,false);
+                                VerticalScrollBackground gameover = new VerticalScrollBackground(R.mipmap.bg_gameover,0);
+                                add(Layer.bg2, gameover);
+                            }
                             collideTime = 0.0f;
                             break;
                         }
@@ -200,16 +225,16 @@ public class BaseGame {
             for (GameObject o2 : bullets) {
                 Bullet bullet = (Bullet) o2;
                 if (CollisionHelper.collides(boss, bullet)) {
-                    remove(bullet);
                     if (boss.getHp() > 0) {
                         boss.setHp(boss.getHp() - bullet.power);
                     } else if (boss.getHp() == 0) {
                         bossdie = true;
-                        remove(boss);
+                        remove(boss, false);
                         score.addScore(1000);
-                        collided = true;
-                        break;
                     }
+                    remove(bullet, false);
+                    collided = true;
+                    break;
                 }
             }
             if(collided) {
@@ -286,22 +311,30 @@ public class BaseGame {
 //        Log.d(TAG, "<A> object count = " + objects.size());
     }
 
-    public void remove(GameObject gameObject) {
-        if(gameObject instanceof Recyclable){
-            ((Recyclable) gameObject).recycle();
-            recycle(gameObject);
-        }
-        GameView.view.post(new Runnable() {
+    public void remove(GameObject gameObject){
+        remove(gameObject,true);
+    }
+    public void remove(GameObject gameObject, boolean delayed) {
+        Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                for(ArrayList<GameObject> objects : layers) {
+                for (ArrayList<GameObject> objects: layers) {
                     boolean removed = objects.remove(gameObject);
-                    if(removed) {
+                    if (removed) {
+                        if (gameObject instanceof Recyclable) {
+                            ((Recyclable) gameObject).recycle();
+                            recycle(gameObject);
+                        }
+                        //Log.d(TAG, "Removed: " + gameObject);
                         break;
                     }
                 }
             }
-//                Log.d(TAG, "<R> object count = " + objects.size());
-        });
+        };
+        if (delayed) {
+            GameView.view.post(runnable);
+        } else{
+            runnable.run();
+        }
     }
 }
